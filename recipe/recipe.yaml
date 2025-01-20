@@ -54,7 +54,7 @@ tests:
 
   # NOTE: disable the test for linux-ppc64le since pytorch is not
   # available. See https://github.com/conda-forge/pytorch-cpu-feedstock/pull/255
-  - if: not linux and not ppc64le
+  - if: not (linux and ppc64le)
     then:
       requirements:
         run:
