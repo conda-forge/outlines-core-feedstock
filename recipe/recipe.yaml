@@ -66,9 +66,15 @@ tests:
     files:
       source:
         - tests/
-    # NOTE: remove test_serialization.py since it imports the tests folder
-    # which is a bad practice and raise an error here.
-    script: pytest -vvv tests/ --ignore=tests/fsm/test_serialization.py
+
+    script:
+      # NOTE: disable the test for linux-ppc64le since pytorch is not
+      # available. See https://github.com/conda-forge/pytorch-cpu-feedstock/pull/255
+      - if: linux and ppc64le
+        then:
+          # NOTE: remove test_serialization.py since it imports the tests folder
+          # which is a bad practice and raise an error here.
+          - pytest -vvv tests/ --ignore=tests/fsm/test_serialization.py
 
 about:
   summary: Structured Text Generation in Rust
