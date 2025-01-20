@@ -74,7 +74,7 @@ tests:
       script:
         # NOTE: remove test_serialization.py since it imports the tests folder
         # which is a bad practice and raise an error here.
-        - ${{ "pytest -vvv tests/ --ignore=tests/fsm/test_serialization.py" if linux and ppc64le }}
+        - pytest -vvv tests/ --ignore=tests/fsm/test_serialization.py
 
 about:
   summary: Structured Text Generation in Rust
