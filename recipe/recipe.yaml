@@ -25,7 +25,6 @@ requirements:
         - setuptools >=45
         - setuptools-scm >=6.2
         - setuptools-rust
-        - openssl
 
     - ${{ compiler('rust') }}
     - ${{ compiler('cxx') }}
