@@ -51,32 +51,30 @@ tests:
       imports:
         - outlines_core
       pip_check: true
-  - requirements:
-      run:
-        - pytest
-        - pytest-benchmark
-        - pytest-mock
-        - scipy
-        - numpy
-        - pytorch
-        - pydantic
-        - transformers
-        - datasets
-        - sentencepiece
-    files:
-      source:
-        - tests/
-    script:
-      # NOTE: disable the test for linux-ppc64le since pytorch is not
-      # available. See https://github.com/conda-forge/pytorch-cpu-feedstock/pull/255
-      - if: linux and ppc64le
-        then:
-          # NOTE: remove test_serialization.py since it imports the tests folder
-          # which is a bad practice and raise an error here.
-          - ${{ "pytest -vvv tests/ --ignore=tests/fsm/test_serialization.py" if linux and ppc64le }}
-        else:
-          # NOTE: the `else` clause is required since empty `script` is not allowed and rendering fails.
-          - python --version
+
+  # NOTE: disable the test for linux-ppc64le since pytorch is not
+  # available. See https://github.com/conda-forge/pytorch-cpu-feedstock/pull/255
+  - if: linux and ppc64le
+    then:
+      requirements:
+        run:
+          - pytest
+          - pytest-benchmark
+          - pytest-mock
+          - scipy
+          - numpy
+          - pytorch
+          - pydantic
+          - transformers
+          - datasets
+          - sentencepiece
+      files:
+        source:
+          - tests/
+      script:
+        # NOTE: remove test_serialization.py since it imports the tests folder
+        # which is a bad practice and raise an error here.
+        - ${{ "pytest -vvv tests/ --ignore=tests/fsm/test_serialization.py" if linux and ppc64le }}
 
 about:
   summary: Structured Text Generation in Rust
