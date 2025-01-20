@@ -11,9 +11,12 @@ source:
   sha256: 594d35c616a90a5da1d172406c8c56ba8a72192964a5f51bb012a3d6710efd22
 
 build:
-  number: 0
+  number: 1
   script:
+    # NOTE: Switch to `script.content` and `script.env` once
+    # https://github.com/prefix-dev/rattler-build/pull/1353 is merged.
     - cargo-bundle-licenses --format yaml --output THIRDPARTY.yml
+    - ${{ "export OPENSSL_DIR=${PREFIX}" if unix }}
     - ${{ PYTHON }} -m pip install . -vv --no-deps --no-build-isolation
 
 requirements:
@@ -25,7 +28,6 @@ requirements:
         - setuptools >=45
         - setuptools-scm >=6.2
         - setuptools-rust
-        - openssl
 
     - ${{ compiler('rust') }}
     - ${{ compiler('cxx') }}
@@ -38,7 +40,7 @@ requirements:
     - setuptools-scm >=6.2
     - setuptools-rust
     - pip
-    - openssl
+    - ${{ "openssl" if unix }}
   run:
     - python
     - interegular
@@ -49,24 +51,30 @@ tests:
       imports:
         - outlines_core
       pip_check: true
-  - requirements:
-      run:
-        - pytest
-        - pytest-benchmark
-        - pytest-mock
-        - scipy
-        - numpy
-        - pytorch
-        - pydantic
-        - transformers
-        - datasets
-        - sentencepiece
-    files:
-      source:
-        - tests/
-    # NOTE: remove test_serialization.py since it imports the tests folder
-    # which is a bad practice and raise an error here.
-    script: pytest -vvv tests/ --ignore=tests/fsm/test_serialization.py
+
+  # NOTE: disable the test for linux-ppc64le since pytorch is not
+  # available. See https://github.com/conda-forge/pytorch-cpu-feedstock/pull/255
+  - if: not (linux and ppc64le)
+    then:
+      requirements:
+        run:
+          - pytest
+          - pytest-benchmark
+          - pytest-mock
+          - scipy
+          - numpy
+          - pytorch
+          - pydantic
+          - transformers
+          - datasets
+          - sentencepiece
+      files:
+        source:
+          - tests/
+      script:
+        # NOTE: remove test_serialization.py since it imports the tests folder
+        # which is a bad practice and raise an error here.
+        - pytest -vvv tests/ --ignore=tests/fsm/test_serialization.py
 
 about:
   summary: Structured Text Generation in Rust
