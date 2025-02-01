@@ -1,6 +1,6 @@
 context:
   name: outlines-core
-  version: 0.1.27
+  version: "0.2.2"
 
 package:
   name: ${{ name|lower }}
@@ -8,10 +8,10 @@ package:
 
 source:
   url: https://pypi.org/packages/source/${{ name[0] }}/${{ name }}/outlines_core-${{ version }}.tar.gz
-  sha256: 594d35c616a90a5da1d172406c8c56ba8a72192964a5f51bb012a3d6710efd22
+  sha256: dcd252617cd9cedc5b3ea3cbad78c13e5d09ac3671c4482210a27ec36a5019d9
 
 build:
-  number: 1
+  number: 0
   script:
     # NOTE: Switch to `script.content` and `script.env` once
     # https://github.com/prefix-dev/rattler-build/pull/1353 is merged.
@@ -43,7 +43,6 @@ requirements:
     - ${{ "openssl" if unix }}
   run:
     - python
-    - interegular
     - jsonschema
 
 tests:
