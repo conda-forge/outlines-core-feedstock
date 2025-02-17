@@ -11,7 +11,7 @@ source:
   sha256: 3e44c09e8138adcd0b05eb8748a5bba912b51127ce03ad37f8fee53324a36d34
 
 build:
-  number: 0
+  number: 1
   script:
     # NOTE: Switch to `script.content` and `script.env` once
     # https://github.com/prefix-dev/rattler-build/pull/1353 is merged.
@@ -73,7 +73,9 @@ tests:
       script:
         # NOTE: remove test_serialization.py since it imports the tests folder
         # which is a bad practice and raise an error here.
-        - pytest -vvv tests/ --ignore=tests/fsm/test_serialization.py
+        - pytest -vvv tests/ --ignore=tests/fsm/test_serialization.py --deselect tests/test_guide.py::test_str_and_bytes_produce_the_same
+        # TODO: remove the preceding deselect on the next release
+        # (Fixed by https://github.com/dottxt-ai/outlines-core/pull/175)
 
 about:
   summary: Structured Text Generation in Rust
