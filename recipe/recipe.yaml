@@ -52,8 +52,7 @@ tests:
 
   # NOTE: disable the test for linux-ppc64le since pytorch is not
   # available. See https://github.com/conda-forge/pytorch-cpu-feedstock/pull/255
-  # NOTE: disable for osx-arm64 cuz of "Bad CPU type in executable" error.
-  - if: not (linux and ppc64le) or (osx and arm64)
+  - if: not (linux and ppc64le)
     then:
       requirements:
         run:
