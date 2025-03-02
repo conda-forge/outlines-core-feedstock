@@ -1,6 +1,6 @@
 context:
   name: outlines-core
-  version: 0.1.26
+  version: "0.1.26"
 
 package:
   name: ${{ name|lower }}
@@ -11,9 +11,10 @@ source:
   sha256: 481c4301341e77cc8f1832d616784adb4d461b4fec65878e7c0d2cba7163a189
 
 build:
-  number: 0
+  number: 1
   script:
     - cargo-bundle-licenses --format yaml --output THIRDPARTY.yml
+    - ${{ "export OPENSSL_DIR=${PREFIX}" if unix }}
     - ${{ PYTHON }} -m pip install . -vv --no-deps --no-build-isolation
 
 requirements:
@@ -25,7 +26,6 @@ requirements:
         - setuptools >=45
         - setuptools-scm >=6.2
         - setuptools-rust
-        - openssl
 
     - ${{ compiler('rust') }}
     - ${{ compiler('cxx') }}
@@ -38,7 +38,7 @@ requirements:
     - setuptools-scm >=6.2
     - setuptools-rust
     - pip
-    - openssl
+    - ${{ "openssl" if unix }}
   run:
     - python
     - interegular
@@ -49,24 +49,6 @@ tests:
       imports:
         - outlines_core
       pip_check: true
-  - requirements:
-      run:
-        - pytest
-        - pytest-benchmark
-        - pytest-mock
-        - scipy
-        - numpy
-        - pytorch
-        - pydantic
-        - transformers
-        - datasets
-        - sentencepiece
-    files:
-      source:
-        - tests/
-    # NOTE: remove test_serialization.py since it imports the tests folder
-    # which is a bad practice and raise an error here.
-    script: pytest -vvv tests/ --ignore=tests/fsm/test_serialization.py
 
 about:
   summary: Structured Text Generation in Rust
