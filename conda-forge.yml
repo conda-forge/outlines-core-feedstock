@@ -10,4 +10,4 @@ build_platform:
   linux_ppc64le: linux_64
   osx_arm64: osx_64
 conda_install_tool: pixi
-test: native
+test: native_and_emulated
