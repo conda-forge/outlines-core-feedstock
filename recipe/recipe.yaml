@@ -33,6 +33,7 @@ requirements:
     - ${{ stdlib("c") }}
     - cargo-bundle-licenses
     - pkg-config
+    - ${{ "cmake" if unix }}  # for the aws-lc-sys rust
   host:
     - python
     - pip
