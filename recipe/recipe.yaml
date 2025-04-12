@@ -31,7 +31,6 @@ requirements:
     - ${{ stdlib("c") }}
     - cargo-bundle-licenses
     - pkg-config
-    - cmake
   host:
     - python
     - pip
