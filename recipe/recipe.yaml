@@ -25,6 +25,7 @@ requirements:
       then:
         - python
         - cross-python_${{ target_platform }}
+        - maturin
     - ${{ compiler('rust') }}
     - ${{ compiler('cxx') }}
     - ${{ stdlib("c") }}
