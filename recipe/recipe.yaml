@@ -66,6 +66,19 @@ tests:
           # E       ImportError: To use the kernels in `outlines_core.kernels.numpy`, `numba` must be installed. You can install it with `pip install numba`
           # ../../../../../lib/python3.13/site-packages/outlines_core/kernels/numpy.py:8: ImportError
           - numba
+          # >       raise exc.InvalidCxxCompiler
+          # E       torch._dynamo.exc.BackendCompilerFailed: backend='inductor' raised:
+          # E       InvalidCxxCompiler: No working C++ compiler found in torch._inductor.config.cpp.cxx: (None, 'g++')
+          # E
+          # E       Set TORCH_LOGS="+dynamo" and TORCHDYNAMO_VERBOSE=1 for more information
+          # E
+          # E
+          # E       You can suppress this exception and fall back to eager by setting:
+          # E           import torch._dynamo
+          # E           torch._dynamo.config.suppress_errors = True
+          # ../../../../../lib/python3.10/site-packages/torch/_inductor/cpp_builder.py:94: BackendCompilerFailed
+          - ${{ compiler('cxx') }}
+
 
       files:
         source:
