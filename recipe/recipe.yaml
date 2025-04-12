@@ -18,6 +18,7 @@ build:
     - cargo-bundle-licenses --format yaml --output THIRDPARTY.yml
     - ${{ "export OPENSSL_DIR=${PREFIX}" if unix }}
     - ${{ "export AWS_LC_SYS_CMAKE_BUILDER=1" if unix }}
+    - ${{ "cargo install --force --locked bindgen-cli" if unix }}
     - ${{ PYTHON }} -m pip install . -vv --no-deps --no-build-isolation
 
 requirements:
