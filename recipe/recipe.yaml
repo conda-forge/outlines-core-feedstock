@@ -28,6 +28,7 @@ requirements:
         - maturin
     - ${{ compiler('rust') }}
     - ${{ compiler('cxx') }}
+    - ${{ compiler('c') }}
     - ${{ stdlib("c") }}
     - cargo-bundle-licenses
     - pkg-config
