@@ -17,6 +17,7 @@ build:
     # https://github.com/prefix-dev/rattler-build/pull/1353 is merged.
     - cargo-bundle-licenses --format yaml --output THIRDPARTY.yml
     - ${{ "export OPENSSL_DIR=${PREFIX}" if unix }}
+    - ${{ "export AWS_LC_SYS_CMAKE_BUILDER=1" if unix }}
     - ${{ PYTHON }} -m pip install . -vv --no-deps --no-build-isolation
 
 requirements:
