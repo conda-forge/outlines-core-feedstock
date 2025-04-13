@@ -1,6 +1,6 @@
 context:
   name: outlines-core
-  version: "0.2.3"
+  version: "0.2.9"
 
 package:
   name: ${{ name|lower }}
@@ -8,15 +8,16 @@ package:
 
 source:
   url: https://pypi.org/packages/source/${{ name[0] }}/${{ name }}/outlines_core-${{ version }}.tar.gz
-  sha256: 3e44c09e8138adcd0b05eb8748a5bba912b51127ce03ad37f8fee53324a36d34
+  sha256: ca9e55dd74bb6482feb9e83028e610732d4ce8fc2a93383c3612abc5775a671b
 
 build:
-  number: 1
+  number: 0
   script:
     # NOTE: Switch to `script.content` and `script.env` once
     # https://github.com/prefix-dev/rattler-build/pull/1353 is merged.
     - cargo-bundle-licenses --format yaml --output THIRDPARTY.yml
     - ${{ "export OPENSSL_DIR=${PREFIX}" if unix }}
+    - ${{ "cargo install --force --locked bindgen-cli" if unix }}
     - ${{ PYTHON }} -m pip install . -vv --no-deps --no-build-isolation
 
 requirements:
@@ -25,21 +26,18 @@ requirements:
       then:
         - python
         - cross-python_${{ target_platform }}
-        - setuptools >=45
-        - setuptools-scm >=6.2
-        - setuptools-rust
-
+        - maturin
     - ${{ compiler('rust') }}
     - ${{ compiler('cxx') }}
+    - ${{ compiler('c') }}
     - ${{ stdlib("c") }}
     - cargo-bundle-licenses
     - pkg-config
   host:
     - python
-    - setuptools >=45
-    - setuptools-scm >=6.2
-    - setuptools-rust
     - pip
+    - maturin
+    - ${{ "patchelf" if not win }}
     - ${{ "openssl" if unix }}
   run:
     - python
@@ -67,15 +65,28 @@ tests:
           - transformers
           - datasets
           - sentencepiece
+          # E       ImportError: To use the kernels in `outlines_core.kernels.numpy`, `numba` must be installed. You can install it with `pip install numba`
+          # ../../../../../lib/python3.13/site-packages/outlines_core/kernels/numpy.py:8: ImportError
+          - numba
+          # >       raise exc.InvalidCxxCompiler
+          # E       torch._dynamo.exc.BackendCompilerFailed: backend='inductor' raised:
+          # E       InvalidCxxCompiler: No working C++ compiler found in torch._inductor.config.cpp.cxx: (None, 'g++')
+          # E
+          # E       Set TORCH_LOGS="+dynamo" and TORCHDYNAMO_VERBOSE=1 for more information
+          # E
+          # E
+          # E       You can suppress this exception and fall back to eager by setting:
+          # E           import torch._dynamo
+          # E           torch._dynamo.config.suppress_errors = True
+          # ../../../../../lib/python3.10/site-packages/torch/_inductor/cpp_builder.py:94: BackendCompilerFailed
+          - ${{ compiler('cxx') }}
+
+
       files:
         source:
           - tests/
       script:
-        # NOTE: remove test_serialization.py since it imports the tests folder
-        # which is a bad practice and raise an error here.
-        - pytest -vvv tests/ --ignore=tests/fsm/test_serialization.py --deselect tests/test_guide.py::test_str_and_bytes_produce_the_same
-        # TODO: remove the preceding deselect on the next release
-        # (Fixed by https://github.com/dottxt-ai/outlines-core/pull/175)
+        - pytest -vvv tests/
 
 about:
   summary: Structured Text Generation in Rust
