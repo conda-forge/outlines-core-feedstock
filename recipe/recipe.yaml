@@ -41,7 +41,6 @@ requirements:
     - ${{ "openssl" if unix }}
   run:
     - python
-    - jsonschema
 
 tests:
   - python:
