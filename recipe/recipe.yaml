@@ -1,6 +1,6 @@
 context:
   name: outlines-core
-  version: "0.2.10"
+  version: "0.2.11"
 
 package:
   name: ${{ name|lower }}
@@ -8,7 +8,7 @@ package:
 
 source:
   url: https://pypi.org/packages/source/${{ name[0] }}/${{ name }}/outlines_core-${{ version }}.tar.gz
-  sha256: c9ee7be195ac18dda5acce41d8805c2fb550a4affd525414511662cfa7097dfe
+  sha256: dfce56f717ff5083e54cbcfdb66cad243365437fccbb5509adaa7e31e030f1d8
 
 build:
   number: 0
