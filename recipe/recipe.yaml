@@ -11,7 +11,7 @@ source:
   sha256: 64808deed1591ca3029ff64346ceb974cd5d780c916ea82504951fe83523039e
 
 build:
-  number: 0
+  number: 1
   script:
     # NOTE: Switch to `script.content` and `script.env` once
     # https://github.com/prefix-dev/rattler-build/pull/1353 is merged.
