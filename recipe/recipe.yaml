@@ -48,9 +48,9 @@ tests:
         - outlines_core
       pip_check: true
 
-  # NOTE: disable the test for linux-ppc64le since pytorch is not
-  # available. See https://github.com/conda-forge/pytorch-cpu-feedstock/pull/255
-  - if: not (linux and ppc64le)
+  # NOTE: pytorch is not yet available for linux-riscv64; re-enable
+  # once pytorch-cpu is migrated.
+  - if: not riscv64
     then:
       requirements:
         run:
