@@ -32,7 +32,7 @@ requirements:
     - ${{ compiler('c') }}
     - ${{ stdlib("c") }}
     - cargo-bundle-licenses
-    - pkg-config
+    - pkgconf
   host:
     - python
     - pip
