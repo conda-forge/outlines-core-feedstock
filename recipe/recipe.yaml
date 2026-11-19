@@ -11,7 +11,7 @@ source:
   sha256: 64808deed1591ca3029ff64346ceb974cd5d780c916ea82504951fe83523039e
 
 build:
-  number: 1
+  number: 2
   script:
     # NOTE: Switch to `script.content` and `script.env` once
     # https://github.com/prefix-dev/rattler-build/pull/1353 is merged.
@@ -32,7 +32,7 @@ requirements:
     - ${{ compiler('c') }}
     - ${{ stdlib("c") }}
     - cargo-bundle-licenses
-    - pkg-config
+    - pkgconf
   host:
     - python
     - pip
@@ -48,9 +48,9 @@ tests:
         - outlines_core
       pip_check: true
 
-  # NOTE: disable the test for linux-ppc64le since pytorch is not
-  # available. See https://github.com/conda-forge/pytorch-cpu-feedstock/pull/255
-  - if: not (linux and ppc64le)
+  # NOTE: pytorch is not yet available for linux-riscv64; re-enable
+  # once pytorch-cpu is migrated.
+  - if: not riscv64
     then:
       requirements:
         run:
@@ -61,9 +61,6 @@ tests:
           - numpy
           - pytorch
           - pydantic
-          - transformers
-          - datasets
-          - sentencepiece
           # E       ImportError: To use the kernels in `outlines_core.kernels.numpy`, `numba` must be installed. You can install it with `pip install numba`
           # ../../../../../lib/python3.13/site-packages/outlines_core/kernels/numpy.py:8: ImportError
           - numba
